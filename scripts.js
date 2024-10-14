@@ -1,30 +1,64 @@
-$(document).ready(function() {
-    // Validación del formulario
-    $("#contact-form").submit(function(event) {
-        event.preventDefault();
-        var email = $("#email").val();
-        var mensaje = $("#mensaje").val();
 
-        // Validación simple de email
-        if (email === "" || !validateEmail(email)) {
-            alert("Por favor, ingrese un correo válido.");
-            return;
+
+$(document).ready(function() {
+    // Capturar el evento de escribir en la barra de búsqueda
+    $('#buscador').on('keyup', function() {
+        var texto = $(this).val().toLowerCase();// Convertir el texto a minúsculas
+        var encontrado = false;
+
+        $('.error-message').hide();
+
+        if (texto === "proyecto 1") {
+            $('html, body').animate({
+                scrollTop: $('#proyecto1').offset().top
+            }, 500);
+            encontrado = true;
+        } else if (texto === "proyecto 2") {
+            $('html, body').animate({
+                scrollTop: $('#proyecto2').offset().top
+            }, 500);
+            encontrado = true;
+        } else if (texto === "proyecto 3") {
+            $('html, body').animate({
+                scrollTop: $('#proyecto3').offset().top
+            }, 500);
+            encontrado = true;
         }
 
-        // Si todo es correcto, mostrar el modal de confirmación
-        $("#modalConfirmacion").modal('show');
+        // Mostrar mensaje si no se encontró ningún proyecto
+        if (!encontrado && texto.length > 0) {
+            $('.error-message').fadeIn(); // Mostrar el mensaje
+        }
     });
+});
+    
 
-    function validateEmail(email) {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
-        return re.test(String(email).toLowerCase());
-    }
+$(document).ready(function() {
+  $('#contactForm').on('submit', function(event) {
+      event.preventDefault(); // Evitar el envío del formulario
 
-    // Buscador de proyectos (búsqueda simple usando contains)
-    $("#project-search").on("input", function() {
-        var value = $(this).val().toLowerCase();
-        $("#projects-container .card").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-    });
+      // Validar el correo electrónico
+      var email = $('#email').val();
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar el correo
+
+      if (emailRegex.test(email)) {
+          // Si el correo es válido, mostrar el modal
+          $(document).ready(function() {
+            $('.btn-primary').on('click', function() {
+                // Mostrar el modal
+              $('#modalConfirmacion').modal('show');
+              $('#contactForm')[0].reset();
+            });
+          });
+          // Resetear el formulario
+      } else {
+          alert('Por favor, introduce un correo electrónico válido.');
+      }
+  });
+});
+
+$(document).ready(function () {
+  $('.card-container').hover(function () {
+    $(this).find('.card-flip').toggleClass('flip');
+  });
 });
