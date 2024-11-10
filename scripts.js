@@ -40,19 +40,16 @@ $(document).ready(function() {
       // Validar el correo electrónico
       var email = $('#email').val();
       var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar el correo
+      var mensaje = $('#mensaje').val()
 
-      if (emailRegex.test(email)) {
+      if (emailRegex.test(email) && mensaje) {
           // Si el correo es válido, mostrar el modal
-          $(document).ready(function() {
-            $('.btn-primary').on('click', function() {
-                // Mostrar el modal
-              $('#modalConfirmacion').modal('show');
-              $('#contactForm')[0].reset();
-            });
-          });
+            $('#modalConfirmacion').modal('show');
+            $('#contactForm')[0].reset();
           // Resetear el formulario
+          $('#contactForm')[0].reset();
       } else {
-          alert('Por favor, introduce un correo electrónico válido.');
+          alert('Por favor, introduce un correo electrónico y mensaje válidos.');
       }
   });
 });
@@ -61,4 +58,35 @@ $(document).ready(function () {
   $('.card-container').hover(function () {
     $(this).find('.card-flip').toggleClass('flip');
   });
+});
+
+// buscar palabra en texto
+$(document).ready(function() {
+    // Función para eliminar el resaltado previo
+    function removeHighlight() {
+        $('span.bg-warning').each(function() {
+            $(this).replaceWith($(this).text());
+        });
+    }
+
+    $('#buscador').on('input', function() {
+        // Eliminar cualquier resaltado previo
+        removeHighlight();
+
+        let searchText = $(this).val().toLowerCase().trim();
+        if (searchText) {
+            // Recorrer cada elemento de texto en la página que sea p, h, o div
+            $('p, h1, h2, h3, h4, h5, h6').each(function() {
+                let element = $(this);
+                let content = element.text();
+
+                // Verificar si el contenido contiene el texto de búsqueda
+                if (content.toLowerCase().includes(searchText)) {
+                    // Dividir el texto en partes para insertar el resaltado
+                    let highlightedText = content.replace(new RegExp(`(${searchText})`, 'gi'), '<span class="bg-warning">$1</span>');
+                    element.html(highlightedText);
+                }
+            });
+        }
+    });
 });
